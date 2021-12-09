@@ -10,5 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface InmuebleRepository extends JpaRepository<Inmuebles, Integer> {
     Boolean existsByDireccion(String direccion);
     Optional<Inmuebles> findByDireccion(String direccion);
+    //Optional<Inmuebles> findByEstadoId(Integer estadoId );
 }
     

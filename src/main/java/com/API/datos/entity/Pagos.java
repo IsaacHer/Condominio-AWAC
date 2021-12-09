@@ -42,7 +42,7 @@ public class Pagos implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @Column(name = "fecha_pago")
-    @Temporal(TemporalType.DATE)
+     @Temporal(TemporalType.DATE)
     private Date fechaPago;
     @JoinColumn(name = "id_cuenta", referencedColumnName = "ID")
     @JsonBackReference(value = "cuenta-pagos")

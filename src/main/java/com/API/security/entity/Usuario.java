@@ -5,7 +5,9 @@ import javax.persistence.*;
 import com.API.datos.entity.Inmuebles;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -16,40 +18,51 @@ public class Usuario {
     @Basic(optional = false)
     @Column(name = "ID")
     private Integer id;
+
     @Basic(optional = false)
     @Column(name = "tipo_doc")
     private String tipoDoc;
+
     @Basic(optional = false)
     @Column(name = "num_doc")
     private int numDoc;
+
     @Basic(optional = false)
     @Column(name = "nombre")
     private String nombre;
+
     @Basic(optional = false)
     @Column(name = "apellido")
     private String apellido;
+
     @Basic(optional = false)
     @Column(name = "nombre_usuario")
     private String nombreUsuario;
+
     @Basic(optional = false)
     @Column(name = "telefono")
     private int telefono;
+
     @Basic(optional = false)
     @Column(name = "email")
     private String email;
+
     @Basic(optional = false)
     @Column(name = "password")
     private String password;
+
     @Column(name = "tokenPassword")
     private String tokenPassword;
+
     @JoinTable(name = "usuario_rol", joinColumns = {
             @JoinColumn(name = "usuario_id", referencedColumnName = "ID") }, inverseJoinColumns = {
                     @JoinColumn(name = "rol_id", referencedColumnName = "ID") })
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Rol> roles = new HashSet<>();
+    
     @JsonManagedReference(value = "usuario_inmueble")
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario")
-    private Set<Inmuebles> inmueblesSet;
+    @OneToMany(mappedBy = "usuario", cascade = {CascadeType.MERGE,CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
+    private List<Inmuebles> listInmuebles;
 
     public Usuario() {
     }
@@ -65,6 +78,14 @@ public class Usuario {
         this.password = password;
     }
 
+    public void agregarInmueble(Inmuebles elInmueble){
+
+        if(listInmuebles == null) listInmuebles = new ArrayList<>();
+
+        listInmuebles.add(elInmueble);
+
+        elInmueble.setUsuario(this);
+    }
     public Integer getId() {
         return id;
     }
@@ -147,14 +168,6 @@ public class Usuario {
 
     public void setTelefono(int telefono) {
         this.telefono = telefono;
-    }
-
-    public Set<Inmuebles> getInmueblesSet() {
-        return inmueblesSet;
-    }
-
-    public void setInmueblesSet(Set<Inmuebles> inmueblesSet) {
-        this.inmueblesSet = inmueblesSet;
     }
     
 }

@@ -48,17 +48,33 @@ public class InmuebleController {
         return new ResponseEntity<>(inmueble, HttpStatus.OK);
     }
 
-    @ApiOperation("Crea un Inmueble")
+    // @ApiOperation("Crea un Inmueble")
+    // @PreAuthorize("hasRole('ADMIN')")
+    // @PostMapping
+    // public ResponseEntity<?> create(@RequestBody Inmuebles inmueble){
+    //     // if(StringUtils.isBlank(inmueble.getDireccion()))
+    //     //     return new ResponseEntity<>(new Mensaje("la direccion es obligatoria"), HttpStatus.BAD_REQUEST);
+    //     // if(inmuebleService.existsById(inmueble.getId()))
+    //     //     return new ResponseEntity<>(new Mensaje("ya existe"), HttpStatus.BAD_REQUEST);
+    //     Inmuebles newInmueble = new Inmuebles(inmueble.getDireccion());
+    //     inmuebleService.save(newInmueble);
+    //     return new ResponseEntity<>(new Mensaje("Inmueble creado"), HttpStatus.OK);
+    // }
+
+    @ApiOperation("Guarda un producto")
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<?> create(@RequestBody Inmuebles inmueble){
-        if(StringUtils.isBlank(inmueble.getDireccion()))
-            return new ResponseEntity<>(new Mensaje("la direccion es obligatoria"), HttpStatus.BAD_REQUEST);
-        if(inmuebleService.existsById(inmueble.getId()))
-            return new ResponseEntity<>(new Mensaje("ya existe"), HttpStatus.BAD_REQUEST);
+        // if(StringUtils.isBlank(productoDto.getNombre()))
+        //     return new ResponseEntity<>(new Mensaje("el nombre es obligatorio"), HttpStatus.BAD_REQUEST);
+        // if(productoDto.getPrecio()==null || productoDto.getPrecio()<0 )
+        //     return new ResponseEntity<>(new Mensaje("el precio debe ser mayor que 0"), HttpStatus.BAD_REQUEST);
+        // if(productoService.existsByNombre(productoDto.getNombre()))
+        //     return new ResponseEntity<>(new Mensaje("ese nombre ya existe"), HttpStatus.BAD_REQUEST);
         Inmuebles newInmueble = new Inmuebles(inmueble.getDireccion());
+        
         inmuebleService.save(newInmueble);
-        return new ResponseEntity<>(new Mensaje("Inmueble creado"), HttpStatus.OK);
+        return new ResponseEntity<>(new Mensaje("producto creado"), HttpStatus.OK);
     }
 
     @ApiOperation("Actualiza un Inmueble")
@@ -82,4 +98,14 @@ public class InmuebleController {
         inmuebleService.delete(id);
         return new ResponseEntity<>(new Mensaje("Inmueble eliminado"), HttpStatus.OK);
     }
+
+    //    @ApiOperation("Obtiene un listado de Inmuebles por su estado")
+    // @GetMapping("/{estado}")
+    // public ResponseEntity<?> getById(@PathVariable("id") int id){
+    //     if(!inmuebleService.existsById(id)){
+    //         return new ResponseEntity<>(new Mensaje("no existe"), HttpStatus.NOT_FOUND);
+    //     }
+    //     Inmuebles inmueble = inmuebleService.getOne(id).get();
+    //     return new ResponseEntity<>(inmueble, HttpStatus.OK);
+    // }
 }

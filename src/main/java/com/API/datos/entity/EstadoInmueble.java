@@ -13,11 +13,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -31,6 +34,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
     @NamedQuery(name = "EstadoInmueble.findAll", query = "SELECT e FROM EstadoInmueble e"),
     @NamedQuery(name = "EstadoInmueble.findById", query = "SELECT e FROM EstadoInmueble e WHERE e.id = :id"),
     @NamedQuery(name = "EstadoInmueble.findByEstado", query = "SELECT e FROM EstadoInmueble e WHERE e.estado = :estado")})
+
 public class EstadoInmueble implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -42,10 +46,9 @@ public class EstadoInmueble implements Serializable {
     @Basic(optional = false)
     @Column(name = "estado")
     private String estado;
-    @JsonIgnore
-    @JsonManagedReference(value = "estadoInmueble")
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "estadoId")
-    private List<Inmuebles> inmueblesList;
+
+  
+    
 
     public EstadoInmueble() {
     }
@@ -75,12 +78,9 @@ public class EstadoInmueble implements Serializable {
         this.estado = estado;
     }
 
-    public List<Inmuebles> getInmueblesList() {
-        return inmueblesList;
-    }
 
-    public void setInmueblesList(List<Inmuebles> inmueblesList) {
-        this.inmueblesList = inmueblesList;
+    public static long getSerialversionuid() {
+        return serialVersionUID;
     }
 
     @Override

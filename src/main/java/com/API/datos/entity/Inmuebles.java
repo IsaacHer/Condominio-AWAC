@@ -5,21 +5,11 @@
 package com.API.datos.entity;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import java.util.Set;
 
+import javax.persistence.*;
 import com.API.security.entity.Usuario;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -43,21 +33,22 @@ public class Inmuebles implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID")
     private Integer id;
+
     @Basic(optional = false)
     @Column(name = "direccion")
     private String direccion;
-    @JsonIgnore
-    @JsonBackReference(value = "inmuebles")
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idInmueble")
-    private List<Cuenta> cuentaList;
-    @JoinColumn(name = "estado_id", referencedColumnName = "ID")
-    @JsonBackReference(value="estadoInmueble")
-    @ManyToOne(optional = false)
-    private EstadoInmueble estadoId;
+    
+
+    @JoinTable(name = "inmueble_estadoInmueble", joinColumns = {
+            @JoinColumn(name = "inmueble_id", referencedColumnName = "ID") }, inverseJoinColumns = {
+                    @JoinColumn(name = "estadoInmueble_id", referencedColumnName = "ID") })
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<EstadoInmueble> estadoInmueble = new HashSet<>();
+
+    @ManyToOne(cascade = {CascadeType.MERGE,CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "id_usuario", referencedColumnName = "ID")
-    @JsonBackReference(value="usuario_inmueble")
-    @ManyToOne(optional = false)
-    private Usuario idUsuario;
+   // @JsonBackReference(value="usuario_inmueble")
+    private Usuario usuario;
 
     public Inmuebles() {
     }
@@ -75,6 +66,13 @@ public class Inmuebles implements Serializable {
         this.direccion = direccion;
     }
 
+    
+
+    public Inmuebles(String direccion, Usuario idUsuario) {
+        this.direccion = direccion;
+        this.usuario = idUsuario;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -90,29 +88,21 @@ public class Inmuebles implements Serializable {
     public void setDireccion(String direccion) {
         this.direccion = direccion;
     }
+   
+    
 
-    public List<Cuenta> getCuentaList() {
-        return cuentaList;
+    public static long getSerialversionuid() {
+        return serialVersionUID;
     }
 
-    public void setCuentaList(List<Cuenta> cuentaList) {
-        this.cuentaList = cuentaList;
+
+
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public EstadoInmueble getEstadoId() {
-        return estadoId;
-    }
-
-    public void setEstadoId(EstadoInmueble estadoId) {
-        this.estadoId = estadoId;
-    }
-
-    public Usuario getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(Usuario idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     @Override

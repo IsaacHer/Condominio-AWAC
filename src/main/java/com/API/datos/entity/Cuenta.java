@@ -69,10 +69,12 @@ public class Cuenta implements Serializable {
     @Basic(optional = false)
     @Column(name = "recargo")
     private float recargo;
+    
     @JsonBackReference(value = "cuenta_estado")
     @JoinColumn(name = "estado_id", referencedColumnName = "ID")
     @ManyToOne(optional = false)
     private EstadoCuenta estadoId;
+
     @JsonBackReference(value = "inmuebles")
     @JoinColumn(name = "id_inmueble", referencedColumnName = "ID")
     @ManyToOne(optional = false)
