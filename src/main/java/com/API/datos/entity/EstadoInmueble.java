@@ -6,20 +6,10 @@ package com.API.datos.entity;
 
 import java.io.Serializable;
 import java.util.List;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
+import com.API.datos.emum.EnumEstadoInmueble;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -35,30 +25,23 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
     @NamedQuery(name = "EstadoInmueble.findById", query = "SELECT e FROM EstadoInmueble e WHERE e.id = :id"),
     @NamedQuery(name = "EstadoInmueble.findByEstado", query = "SELECT e FROM EstadoInmueble e WHERE e.estado = :estado")})
 
-public class EstadoInmueble implements Serializable {
+public class EstadoInmueble {
 
-    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "ID")
     private Integer id;
-    @Basic(optional = false)
-    @Column(name = "estado")
-    private String estado;
 
-  
+  @NotNull
+    @Enumerated(EnumType.STRING)
+    private EnumEstadoInmueble estado;
+
     
 
     public EstadoInmueble() {
     }
 
-    public EstadoInmueble(Integer id) {
-        this.id = id;
-    }
-
-    public EstadoInmueble(Integer id, String estado) {
-        this.id = id;
+     public EstadoInmueble(@NotNull EnumEstadoInmueble estado) {
         this.estado = estado;
     }
 
@@ -70,18 +53,15 @@ public class EstadoInmueble implements Serializable {
         this.id = id;
     }
 
-    public String getEstado() {
+   
+    public EnumEstadoInmueble getEstado() {
         return estado;
     }
 
-    public void setEstado(String estado) {
+    public void setEstado(EnumEstadoInmueble estado) {
         this.estado = estado;
     }
 
-
-    public static long getSerialversionuid() {
-        return serialVersionUID;
-    }
 
     @Override
     public int hashCode() {

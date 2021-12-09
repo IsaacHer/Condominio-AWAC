@@ -53,25 +53,11 @@ public class Inmuebles implements Serializable {
     public Inmuebles() {
     }
 
-    public Inmuebles(Integer id) {
-        this.id = id;
-    }
 
     public Inmuebles(String direccion) {
         this.direccion = direccion;
     }
 
-    public Inmuebles(Integer id, String direccion) {
-        this.id = id;
-        this.direccion = direccion;
-    }
-
-    
-
-    public Inmuebles(String direccion, Usuario idUsuario) {
-        this.direccion = direccion;
-        this.usuario = idUsuario;
-    }
 
     public Integer getId() {
         return id;
@@ -104,6 +90,18 @@ public class Inmuebles implements Serializable {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
+
+
+    
+    public Set<EstadoInmueble> getEstadoInmueble() {
+        return estadoInmueble;
+    }
+
+    public void setEstadoInmueble(Set<EstadoInmueble> estadoInmueble) {
+        this.estadoInmueble = estadoInmueble;
+    }
+
+
 
     @Override
     public int hashCode() {

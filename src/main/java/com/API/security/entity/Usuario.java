@@ -86,6 +86,7 @@ public class Usuario {
 
         elInmueble.setUsuario(this);
     }
+    
     public Integer getId() {
         return id;
     }

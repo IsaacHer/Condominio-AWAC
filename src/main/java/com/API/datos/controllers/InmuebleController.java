@@ -1,9 +1,16 @@
 package com.API.datos.controllers;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import javax.validation.Valid;
+
+import com.API.datos.emum.EnumEstadoInmueble;
+import com.API.datos.entity.EstadoInmueble;
 import com.API.datos.entity.Inmuebles;
 import com.API.datos.entity.Mensaje;
+import com.API.datos.services.EstadoInmuebleService;
 import com.API.datos.services.InmuebleService;
 
 import org.apache.commons.lang3.StringUtils;
@@ -11,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +39,9 @@ public class InmuebleController {
     @Autowired
     InmuebleService inmuebleService;
 
+      @Autowired
+    EstadoInmuebleService estadoService;
+
     @ApiOperation("Muestra una lista Inmuebles")
     @GetMapping
     public ResponseEntity<List<Inmuebles>> list(){
@@ -48,33 +59,25 @@ public class InmuebleController {
         return new ResponseEntity<>(inmueble, HttpStatus.OK);
     }
 
-    // @ApiOperation("Crea un Inmueble")
-    // @PreAuthorize("hasRole('ADMIN')")
-    // @PostMapping
-    // public ResponseEntity<?> create(@RequestBody Inmuebles inmueble){
-    //     // if(StringUtils.isBlank(inmueble.getDireccion()))
-    //     //     return new ResponseEntity<>(new Mensaje("la direccion es obligatoria"), HttpStatus.BAD_REQUEST);
-    //     // if(inmuebleService.existsById(inmueble.getId()))
-    //     //     return new ResponseEntity<>(new Mensaje("ya existe"), HttpStatus.BAD_REQUEST);
-    //     Inmuebles newInmueble = new Inmuebles(inmueble.getDireccion());
-    //     inmuebleService.save(newInmueble);
-    //     return new ResponseEntity<>(new Mensaje("Inmueble creado"), HttpStatus.OK);
-    // }
-
-    @ApiOperation("Guarda un producto")
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping
-    public ResponseEntity<?> create(@RequestBody Inmuebles inmueble){
-        // if(StringUtils.isBlank(productoDto.getNombre()))
-        //     return new ResponseEntity<>(new Mensaje("el nombre es obligatorio"), HttpStatus.BAD_REQUEST);
-        // if(productoDto.getPrecio()==null || productoDto.getPrecio()<0 )
-        //     return new ResponseEntity<>(new Mensaje("el precio debe ser mayor que 0"), HttpStatus.BAD_REQUEST);
-        // if(productoService.existsByNombre(productoDto.getNombre()))
-        //     return new ResponseEntity<>(new Mensaje("ese nombre ya existe"), HttpStatus.BAD_REQUEST);
-        Inmuebles newInmueble = new Inmuebles(inmueble.getDireccion());
-        
-        inmuebleService.save(newInmueble);
-        return new ResponseEntity<>(new Mensaje("producto creado"), HttpStatus.OK);
+  @PostMapping
+    public ResponseEntity<?> nuevo(@Valid @RequestBody Inmuebles nuevoInmueble, BindingResult bindingResult){
+        if(bindingResult.hasErrors())
+            return new ResponseEntity<>(new Mensaje("Campos mal puestos o email inválido"), HttpStatus.BAD_REQUEST);
+        // if(inmuebleService.existsByNombreUsuario(nuevoInmueble.getDireccion()))
+        //     return new ResponseEntity<>(new Mensaje("Ese nombre ya existe"), HttpStatus.BAD_REQUEST);
+        // if(usuarioService.existsByEmail(nuevoUsuario.getEmail()))
+        //     return new ResponseEntity<>(new Mensaje("Ese email ya existe"), HttpStatus.BAD_REQUEST);
+
+        Set<EstadoInmueble> estados = new HashSet<>();
+                
+        estados.add(estadoService.findByEnumEstadoInmueble(EnumEstadoInmueble.VACIO).get());
+        if(nuevoInmueble.getEstadoInmueble().contains("ADMIN"))
+            estados.add(estadoService.findByEnumEstadoInmueble(EnumEstadoInmueble.OCUPADO).get());
+        nuevoInmueble.setEstadoInmueble(estados);
+
+        inmuebleService.save(nuevoInmueble);
+        return new ResponseEntity<>(new Mensaje("Usuario guardado"), HttpStatus.CREATED);
     }
 
     @ApiOperation("Actualiza un Inmueble")

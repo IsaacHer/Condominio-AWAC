@@ -22,6 +22,7 @@ D:\2021-ll\API\APP\New folder\src\main\java\com\API\security\entity\Usuario.java
 D:\2021-ll\API\APP\New folder\src\main\java\com\API\ApiApplication.java
 D:\2021-ll\API\APP\New folder\src\main\java\com\API\security\controller\UsuarioController.java
 D:\2021-ll\API\APP\New folder\src\main\java\com\API\security\MainSecurity.java
+D:\2021-ll\API\APP\New folder\src\main\java\com\API\datos\emum\EnumEstadoInmueble.java
 D:\2021-ll\API\APP\New folder\src\main\java\com\API\security\enums\RolNombre.java
 D:\2021-ll\API\APP\New folder\src\main\java\com\API\swagger\SwaggerConfig.java
 D:\2021-ll\API\APP\New folder\src\main\java\com\API\datos\entity\EstadoInmueble.java
